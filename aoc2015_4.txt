@@ -1,0 +1,25 @@
+% Make in: https://paiza.io/en/languages/erlang
+-module(main).
+-export([main/1]).
+
+calc([WSize, HSize, LSize]) ->
+    2 * ((WSize + HSize + LSize) - max(WSize, max(HSize, LSize))) + WSize * HSize * LSize.
+
+parse([H | T]) ->
+    [list_to_integer(H) | parse(T)];
+parse([]) ->
+    [].
+
+split(Line) ->
+    string:tokens(string:trim(Line, trailing, "\n"), "x").
+
+read_each_line(Device, PrevValue) ->
+    case io:get_line(Device, "") of
+        eof  -> file:close(Device), PrevValue;
+        Line -> read_each_line(Device, calc(parse(split(Line)))) + PrevValue
+    end.
+
+main([_]) ->
+    {ok, Device} = file:open("File1", read),
+    io:format("Square: ~w",[read_each_line(Device, 0)]),
+init:stop() .
