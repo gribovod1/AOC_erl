@@ -1,5 +1,5 @@
 -module(aoc2015_day4).
--author("Shilin").
+-author("Gribovod").
 
 %% API
 -export([santacoin/0]).
